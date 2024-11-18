@@ -11,8 +11,8 @@ function git_sparse_clone() {
 
 # Add packages
 #添加科学上网源
-git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
-git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
+#git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
+#git clone --depth=1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
 git clone -b 18.06 --single-branch --depth 1 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 git clone -b 18.06 --single-branch --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 #git clone --depth=1 https://github.com/sirpdboy/luci-app-ddns-go package/ddnsgo
@@ -42,9 +42,11 @@ rm -rf feeds/luci/applications/luci-app-argon-config
 
 # Default IP
 #sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.5.1/g' package/base-files/files/bin/config_generate
 
 # 修改主机名
 #sed -i "s/hostname='OpenWrt'/hostname='Redmi-AX6'/g" package/base-files/files/bin/config_generate
+sed -i "s/hostname='OpenWrt'/hostname='RT-HOME'/g" package/base-files/files/bin/config_generate
 
 #修改默认时间格式
 sed -i 's/os.date()/os.date("%Y-%m-%d %H:%M:%S %A")/g' $(find ./package/*/autocore/files/ -type f -name "index.htm")
