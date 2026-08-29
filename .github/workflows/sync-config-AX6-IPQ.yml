@@ -1,0 +1,55 @@
+name: Sync AX6-IPQ Config
+
+on:
+  workflow_dispatch:
+
+env:
+  REPO_URL: https://github.com/VIKINGYFY/immortalwrt.git
+  REPO_BRANCH: main
+  CONFIG_FILE: AX6-IPQ/.config
+  DIY_SH: AX6-IPQ/diy.sh
+  FILES: AX6-IPQ/files
+  TZ: Asia/Shanghai
+
+jobs:
+  sync-config:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get -qq update -y
+          sudo apt-get -qq install -y $(curl -fsSL https://raw.githubusercontent.com/nantayo/My-Pkg/master/2305)
+          sudo timedatectl set-timezone "$TZ"
+
+      - name: Sync config
+        run: |
+          git clone --depth=1 -b $REPO_BRANCH $REPO_URL openwrt
+          cd openwrt
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+          [ -e "$GITHUB_WORKSPACE/$FILES" ] && cp -a "$GITHUB_WORKSPACE/$FILES" files
+          cp "$GITHUB_WORKSPACE/$CONFIG_FILE" .config
+          chmod +x "$GITHUB_WORKSPACE/$DIY_SH"
+          "$GITHUB_WORKSPACE/$DIY_SH"
+          make defconfig
+          cp .config "$GITHUB_WORKSPACE/$CONFIG_FILE"
+
+      - name: Upload config
+        uses: actions/upload-artifact@v4
+        with:
+          name: AX6-IPQ-config-${{ github.run_number }}
+          path: ${{ env.CONFIG_FILE }}
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "### 配置已同步" >> $GITHUB_STEP_SUMMARY
+          echo "1. 下载 **Artifacts** → \`AX6-IPQ-config-*\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. 覆盖 \`AX6-IPQ/.config\` 并提交" >> $GITHUB_STEP_SUMMARY
+          echo "3. 运行 **Build OpenWRT for AX6-NSS** 编译固件" >> $GITHUB_STEP_SUMMARY
