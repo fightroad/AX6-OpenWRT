@@ -1,0 +1,108 @@
+name: SSH Menuconfig (AX6-IPQ)
+
+on:
+  workflow_dispatch:
+    inputs:
+      sync_defconfig:
+        description: '进入 SSH 前先执行 make defconfig 同步配置'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  REPO_URL: https://github.com/VIKINGYFY/immortalwrt.git
+  REPO_BRANCH: main
+  CONFIG_FILE: AX6-IPQ/.config
+  DIY_SH: AX6-IPQ/diy.sh
+  FILES: AX6-IPQ/files
+  TZ: Asia/Shanghai
+
+jobs:
+  menuconfig:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize environment
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo -E apt-get -qq update -y
+          sudo -E apt-get -qq install -y $(curl -fsSL https://raw.githubusercontent.com/nantayo/My-Pkg/master/2305)
+          sudo -E apt-get -qq autoremove --purge
+          sudo -E apt-get -qq clean
+          sudo timedatectl set-timezone "$TZ"
+          sudo chown $USER:$GROUPS $GITHUB_WORKSPACE
+
+      - name: Clone source code
+        run: git clone --depth=1 -b $REPO_BRANCH $REPO_URL openwrt
+
+      - name: Update & Install feeds
+        working-directory: ./openwrt
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Load custom config
+        run: |
+          [ -e "$FILES" ] && cp -a "$FILES" openwrt/files
+          [ -e "$CONFIG_FILE" ] && cp "$CONFIG_FILE" openwrt/.config
+          chmod +x "$DIY_SH"
+          cd openwrt
+          "$GITHUB_WORKSPACE/$DIY_SH"
+
+      - name: Sync defconfig
+        if: inputs.sync_defconfig
+        working-directory: ./openwrt
+        run: make defconfig
+
+      - name: Print SSH instructions
+        run: |
+          cat <<'EOF'
+          ============================================================
+          SSH 连接成功后，在远程终端执行：
+
+            cd $GITHUB_WORKSPACE/openwrt
+            make menuconfig
+
+          常用路径：
+            Target System  → Qualcomm Atheros IPQ807x → Redmi AX6 (stock)
+            LuCI           → Applications → luci-app-passwall
+
+          改完后保存退出 menuconfig，然后输入 exit 断开 SSH。
+          Workflow 会自动把 openwrt/.config 同步并上传，无需手动 cp。
+          ============================================================
+          EOF
+
+      - name: SSH connect to Actions
+        uses: P3TERX/ssh2actions@main
+
+      - name: Sync config back to repo path
+        run: |
+          if [ -f openwrt/.config ]; then
+            cp openwrt/.config AX6-IPQ/.config
+            echo "已从 openwrt/.config 同步到 AX6-IPQ/.config"
+          else
+            echo "::error::未找到 openwrt/.config"
+            exit 1
+          fi
+
+      - name: Upload updated config
+        uses: actions/upload-artifact@v4
+        with:
+          name: AX6-IPQ-config-${{ github.run_number }}
+          path: AX6-IPQ/.config
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "### 配置已导出" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. 打开本次 Workflow Run 页面" >> $GITHUB_STEP_SUMMARY
+          echo "2. 在 **Artifacts** 下载 \`AX6-IPQ-config-*\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. 用下载的 \`.config\` 覆盖仓库中的 \`AX6-IPQ/.config\` 并提交" >> $GITHUB_STEP_SUMMARY
+          echo "4. 再运行 **Build OpenWRT for AX6-NSS** 进行云编译" >> $GITHUB_STEP_SUMMARY
