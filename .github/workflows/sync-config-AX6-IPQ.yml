@@ -1,7 +1,13 @@
-name: Sync AX6-IPQ Config
+name: AX6-IPQ Config
 
 on:
   workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH 进入 menuconfig（upterm，无需注册）'
+        required: false
+        default: false
+        type: boolean
 
 env:
   REPO_URL: https://github.com/VIKINGYFY/immortalwrt.git
@@ -12,9 +18,9 @@ env:
   TZ: Asia/Shanghai
 
 jobs:
-  sync-config:
+  config:
     runs-on: ubuntu-22.04
-    timeout-minutes: 90
+    timeout-minutes: 180
 
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +33,7 @@ jobs:
           sudo apt-get -qq install -y $(curl -fsSL https://raw.githubusercontent.com/nantayo/My-Pkg/master/2305)
           sudo timedatectl set-timezone "$TZ"
 
-      - name: Sync config
+      - name: Prepare OpenWrt
         run: |
           git clone --depth=1 -b $REPO_BRANCH $REPO_URL openwrt
           cd openwrt
@@ -38,7 +44,26 @@ jobs:
           chmod +x "$GITHUB_WORKSPACE/$DIY_SH"
           "$GITHUB_WORKSPACE/$DIY_SH"
           make defconfig
-          cp .config "$GITHUB_WORKSPACE/$CONFIG_FILE"
+
+      - name: SSH hint
+        if: inputs.ssh
+        run: |
+          echo "=============================================="
+          echo "下一步日志找: ssh xxx@uptermd.upterm.dev"
+          echo "连上后: cd \$GITHUB_WORKSPACE/openwrt && make menuconfig"
+          echo "改完:   cd \$GITHUB_WORKSPACE && touch continue"
+          echo "（日志刷新是正常的，直接输入命令即可）"
+          echo "=============================================="
+
+      - name: SSH menuconfig
+        if: inputs.ssh
+        uses: owenthereal/action-upterm@v1
+        timeout-minutes: 120
+        with:
+          wait-timeout-minutes: 30
+
+      - name: Export config
+        run: cp openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE"
 
       - name: Upload config
         uses: actions/upload-artifact@v4
@@ -49,7 +74,21 @@ jobs:
 
       - name: Summary
         run: |
-          echo "### 配置已同步" >> $GITHUB_STEP_SUMMARY
-          echo "1. 下载 **Artifacts** → \`AX6-IPQ-config-*\`" >> $GITHUB_STEP_SUMMARY
-          echo "2. 覆盖 \`AX6-IPQ/.config\` 并提交" >> $GITHUB_STEP_SUMMARY
-          echo "3. 运行 **Build OpenWRT for AX6-NSS** 编译固件" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "### 配置已导出"
+            echo ""
+            if [ "${{ inputs.ssh }}" = "true" ]; then
+              echo "**SSH 模式**：日志里找 \`ssh xxx@uptermd.upterm.dev\`，连上后执行："
+              echo "\`\`\`bash"
+              echo "cd \$GITHUB_WORKSPACE/openwrt && make menuconfig"
+              echo "cd \$GITHUB_WORKSPACE && touch continue"
+              echo "\`\`\`"
+              echo ""
+            else
+              echo "已执行 \`make defconfig\` 同步配置（未进 menuconfig）。"
+              echo ""
+            fi
+            echo "1. 下载 **Artifacts** → \`AX6-IPQ-config-*\`"
+            echo "2. 覆盖 \`AX6-IPQ/.config\` 并提交"
+            echo "3. 运行 **Build OpenWRT for AX6-NSS**"
+          } >> "$GITHUB_STEP_SUMMARY"
