@@ -31,7 +31,7 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           sudo -E apt-get -qq update -y
-          sudo -E apt-get -qq install -y $(curl -fsSL https://raw.githubusercontent.com/nantayo/My-Pkg/master/2305)
+          sudo -E apt-get -qq install -y tmate $(curl -fsSL https://raw.githubusercontent.com/nantayo/My-Pkg/master/2305)
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "$TZ"
@@ -63,7 +63,12 @@ jobs:
         run: |
           cat <<'EOF'
           ============================================================
-          SSH 连接成功后，在远程终端执行：
+          下一步会开启 tmate SSH，请在本步骤日志最底部查找：
+
+            Web URL: https://tmate.io/t/xxxxxxxx
+            SSH:     ssh xxxxx@xxxxx.tmate.io
+
+          连接成功后执行：
 
             cd $GITHUB_WORKSPACE/openwrt
             make menuconfig
@@ -72,13 +77,16 @@ jobs:
             Target System  → Qualcomm Atheros IPQ807x → Redmi AX6 (stock)
             LuCI           → Applications → luci-app-passwall
 
-          改完后保存退出 menuconfig，然后输入 exit 断开 SSH。
-          Workflow 会自动把 openwrt/.config 同步并上传，无需手动 cp。
+          改完后保存退出 menuconfig，执行 exit 断开 SSH。
+          若 tmate.io 打不开，可尝试用 SSH 命令连接。
           ============================================================
           EOF
 
       - name: SSH connect to Actions
-        uses: P3TERX/ssh2actions@main
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 120
+        with:
+          limit-access-to-actor: false
 
       - name: Sync config back to repo path
         run: |
