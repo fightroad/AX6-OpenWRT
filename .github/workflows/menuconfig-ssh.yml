@@ -3,8 +3,16 @@ name: SSH Menuconfig (AX6-IPQ)
 on:
   workflow_dispatch:
     inputs:
+      mode:
+        description: '运行模式'
+        required: true
+        default: 'defconfig_only'
+        type: choice
+        options:
+          - defconfig_only
+          - ssh_menuconfig
       sync_defconfig:
-        description: '进入 SSH 前先执行 make defconfig 同步配置'
+        description: '执行 make defconfig 同步配置'
         required: false
         default: true
         type: boolean
@@ -31,7 +39,10 @@ jobs:
           DEBIAN_FRONTEND: noninteractive
         run: |
           sudo -E apt-get -qq update -y
-          sudo -E apt-get -qq install -y tmate $(curl -fsSL https://raw.githubusercontent.com/nantayo/My-Pkg/master/2305)
+          sudo -E apt-get -qq install -y $(curl -fsSL https://raw.githubusercontent.com/nantayo/My-Pkg/master/2305)
+          if [ "${{ inputs.mode }}" = "ssh_menuconfig" ]; then
+            sudo -E apt-get -qq install -y tmate
+          fi
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "$TZ"
@@ -59,34 +70,61 @@ jobs:
         working-directory: ./openwrt
         run: make defconfig
 
-      - name: Print SSH instructions
-        run: |
-          cat <<'EOF'
-          ============================================================
-          下一步会开启 tmate SSH，请在本步骤日志最底部查找：
-
-            Web URL: https://tmate.io/t/xxxxxxxx
-            SSH:     ssh xxxxx@xxxxx.tmate.io
-
-          连接成功后执行：
-
-            cd $GITHUB_WORKSPACE/openwrt
-            make menuconfig
-
-          常用路径：
-            Target System  → Qualcomm Atheros IPQ807x → Redmi AX6 (stock)
-            LuCI           → Applications → luci-app-passwall
-
-          改完后保存退出 menuconfig，执行 exit 断开 SSH。
-          若 tmate.io 打不开，可尝试用 SSH 命令连接。
-          ============================================================
-          EOF
-
       - name: SSH connect to Actions
-        uses: mxschmitt/action-tmate@v3
+        if: inputs.mode == 'ssh_menuconfig'
         timeout-minutes: 120
-        with:
-          limit-access-to-actor: false
+        run: |
+          set -e
+          TMATE_SOCK="/tmp/tmate.sock"
+
+          echo "tmate version: $(tmate -V)"
+          echo "启动 tmate..."
+
+          tmate -S "${TMATE_SOCK}" new-session -d
+
+          echo "等待 tmate-ready（最多 90 秒，连的是 tmate.io 服务器）..."
+          if ! timeout 90 tmate -S "${TMATE_SOCK}" wait tmate-ready; then
+            echo "::error::tmate 连接超时。请 Cancel 后改用 defconfig_only 模式，或本机 Docker 跑 menuconfig。"
+            exit 1
+          fi
+
+          TMATE_SSH=$(tmate -S "${TMATE_SOCK}" display -p '#{tmate_ssh}')
+          TMATE_WEB=$(tmate -S "${TMATE_SOCK}" display -p '#{tmate_web}')
+
+          {
+            echo "### tmate 连接信息（也可看下方日志）"
+            echo ""
+            echo "**Web 浏览器打开:** ${TMATE_WEB}"
+            echo ""
+            echo "**SSH:** \`${TMATE_SSH}\`"
+            echo ""
+            echo "连上后执行:"
+            echo "\`\`\`bash"
+            echo "cd \$GITHUB_WORKSPACE/openwrt"
+            echo "make menuconfig"
+            echo "\`\`\`"
+            echo ""
+            echo "改完保存后输入 \`exit\` 断开。"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          echo "::notice title=tmate Web URL::${TMATE_WEB}"
+          echo "::notice title=tmate SSH::${TMATE_SSH}"
+
+          (
+            while true; do
+              echo "========== tmate 连接（每 20 秒刷新） =========="
+              echo "Web URL: ${TMATE_WEB}"
+              echo "SSH:     ${TMATE_SSH}"
+              echo "================================================"
+              sleep 20
+            done
+          ) &
+          PRINT_PID=$!
+
+          echo "等待你在 tmate 终端里完成 menuconfig 并 exit..."
+          tmate -S "${TMATE_SOCK}" wait session-closed || true
+          kill "${PRINT_PID}" 2>/dev/null || true
+          echo "tmate 已断开，继续上传配置"
 
       - name: Sync config back to repo path
         run: |
@@ -110,7 +148,10 @@ jobs:
         run: |
           echo "### 配置已导出" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "1. 打开本次 Workflow Run 页面" >> $GITHUB_STEP_SUMMARY
-          echo "2. 在 **Artifacts** 下载 \`AX6-IPQ-config-*\`" >> $GITHUB_STEP_SUMMARY
-          echo "3. 用下载的 \`.config\` 覆盖仓库中的 \`AX6-IPQ/.config\` 并提交" >> $GITHUB_STEP_SUMMARY
-          echo "4. 再运行 **Build OpenWRT for AX6-NSS** 进行云编译" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ inputs.mode }}" = "defconfig_only" ]; then
+            echo "- 本次为 **defconfig_only**：已按最新 feeds 同步 .config，未进入 menuconfig" >> $GITHUB_STEP_SUMMARY
+            echo "- 如需手改插件，请本机 Docker 跑 menuconfig，或重试 ssh_menuconfig 模式" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "1. 在 **Artifacts** 下载 \`AX6-IPQ-config-*\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. 覆盖仓库 \`AX6-IPQ/.config\` 并提交" >> $GITHUB_STEP_SUMMARY
+          echo "3. 运行 **Build OpenWRT for AX6-NSS** 云编译" >> $GITHUB_STEP_SUMMARY
