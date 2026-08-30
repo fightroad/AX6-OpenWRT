@@ -32,7 +32,7 @@ LuCI ---> Applications ---> luci-app-upnp   #通用即插即用UPnP（端口自�
 LuCI ---> Applications ---> luci-app-vlmcsd  #KMS服务器设置
 LuCI ---> Applications ---> luci-app-vsftpd  #FTP服务器
 LuCI ---> Applications ---> luci-app-wifischedule  #WiFi 计划
-LuCI ---> Applications ---> luci-app-wireleShadowsocksRegdb  #WiFi无线
+LuCI ---> Applications ---> luci-app-wireless-regdb  #WiFi无线
 LuCI ---> Applications ---> luci-app-wol   #WOL网络唤醒
 LuCI ---> Applications ---> luci-app-wrtbwmon  #实时流量监测
 LuCI ---> Applications ---> luci-app-xlnetacc  #迅雷快鸟
