@@ -152,13 +152,15 @@ jobs:
         run: |
           test -f openwrt/.config || { echo "::error::openwrt/.config 不存在"; exit 1; }
           cp openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE"
-          ls -la openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE"
+          mkdir -p artifact
+          cp openwrt/.config artifact/AX6-IPQ.config
+          ls -la openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE" artifact/AX6-IPQ.config
 
       - name: Upload config
         uses: actions/upload-artifact@v4
         with:
           name: AX6-IPQ-config-${{ github.run_number }}
-          path: ${{ env.CONFIG_FILE }}
+          path: artifact/AX6-IPQ.config
           retention-days: 30
 
       - name: Summary
@@ -174,7 +176,7 @@ jobs:
               echo "已执行 \`make defconfig\` 同步配置（未进 menuconfig）。"
               echo ""
             fi
-            echo "1. 下载 **Artifacts** → \`AX6-IPQ-config-*\`"
-            echo "2. 覆盖 \`AX6-IPQ/.config\` 并提交"
+            echo "1. 下载 **Artifacts** → \`AX6-IPQ-config-*\`（文件名为 \`AX6-IPQ.config\`）"
+            echo "2. 重命名为 \`.config\` 后覆盖 \`AX6-IPQ/.config\` 并提交"
             echo "3. 运行 **Build OpenWRT for AX6-NSS**"
           } >> "$GITHUB_STEP_SUMMARY"
