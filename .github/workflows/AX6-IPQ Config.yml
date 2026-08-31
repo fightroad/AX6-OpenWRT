@@ -47,6 +47,7 @@ jobs:
           chmod +x "$GITHUB_WORKSPACE/$DIY_SH"
           "$GITHUB_WORKSPACE/$DIY_SH"
           make defconfig
+          make olddefconfig
 
       - name: SSH menuconfig via FRP
         if: inputs.ssh
@@ -150,11 +151,13 @@ jobs:
 
       - name: Export config
         run: |
-          test -f openwrt/.config || { echo "::error::openwrt/.config 不存在"; exit 1; }
-          cp openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE"
-          mkdir -p artifact
-          cp openwrt/.config artifact/AX6-IPQ.config
-          ls -la openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE" artifact/AX6-IPQ.config
+          cd openwrt
+          make olddefconfig
+          test -f .config || { echo "::error::openwrt/.config 不存在"; exit 1; }
+          cp .config "$GITHUB_WORKSPACE/$CONFIG_FILE"
+          mkdir -p "$GITHUB_WORKSPACE/artifact"
+          cp .config "$GITHUB_WORKSPACE/artifact/AX6-IPQ.config"
+          ls -la .config "$GITHUB_WORKSPACE/$CONFIG_FILE" "$GITHUB_WORKSPACE/artifact/AX6-IPQ.config"
 
       - name: Upload config
         uses: actions/upload-artifact@v4
@@ -173,7 +176,7 @@ jobs:
               echo "连上后日志里会有 \`cd /home/runner/work/.../openwrt && make menuconfig\` 等命令。"
               echo ""
             else
-              echo "已执行 \`make defconfig\` 同步配置（未进 menuconfig）。"
+              echo "已执行 \`make defconfig\` 与 \`make olddefconfig\` 同步配置（未进 menuconfig）。"
               echo ""
             fi
             echo "1. 下载 **Artifacts** → \`AX6-IPQ-config-*\`（文件名为 \`AX6-IPQ.config\`）"
