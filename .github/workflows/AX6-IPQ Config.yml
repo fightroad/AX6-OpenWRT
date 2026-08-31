@@ -52,19 +52,23 @@ jobs:
         if: inputs.ssh
         timeout-minutes: 120
         env:
-          FRP_SERVER_ADDR: ${{ secrets.FRP_SERVER_ADDR }}
-          FRP_SERVER_PORT: ${{ secrets.FRP_SERVER_PORT }}
+          FRP_SERVER_ADDR: ${{ vars.FRP_SERVER_ADDR }}
+          FRP_SERVER_PORT: ${{ vars.FRP_SERVER_PORT }}
+          FRP_REMOTE_PORT: ${{ vars.FRP_REMOTE_PORT }}
           FRP_TOKEN: ${{ secrets.FRP_TOKEN }}
-          FRP_REMOTE_PORT: ${{ secrets.FRP_REMOTE_PORT }}
         run: |
           set -euo pipefail
 
-          for v in FRP_SERVER_ADDR FRP_SERVER_PORT FRP_TOKEN FRP_REMOTE_PORT; do
+          for v in FRP_SERVER_ADDR FRP_SERVER_PORT FRP_REMOTE_PORT; do
             if [ -z "${!v:-}" ]; then
-              echo "::error::缺少 Secret: $v"
+              echo "::error::缺少 Variable: $v（Settings → Actions → Variables）"
               exit 1
             fi
           done
+          if [ -z "${FRP_TOKEN:-}" ]; then
+            echo "::error::缺少 Secret: FRP_TOKEN"
+            exit 1
+          fi
 
           SSH_PASSWORD=$(openssl rand -hex 16)
 
