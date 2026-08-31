@@ -47,6 +47,7 @@ jobs:
           chmod +x "$GITHUB_WORKSPACE/$DIY_SH"
           "$GITHUB_WORKSPACE/$DIY_SH"
           make defconfig
+          make olddefconfig
 
       - name: SSH menuconfig via FRP
         if: inputs.ssh
@@ -175,7 +176,7 @@ jobs:
               echo "连上后日志里会有 \`cd /home/runner/work/.../openwrt && make menuconfig\` 等命令。"
               echo ""
             else
-              echo "已执行 \`make defconfig\` 同步配置；导出前会再跑 \`make olddefconfig\`（未进 menuconfig）。"
+              echo "已执行 \`make defconfig\` 与 \`make olddefconfig\` 同步配置（未进 menuconfig）。"
               echo ""
             fi
             echo "1. 下载 **Artifacts** → \`AX6-IPQ-config-*\`（文件名为 \`AX6-IPQ.config\`）"
