@@ -131,6 +131,9 @@ jobs:
       working-directory: ./openwrt
       run: |
         make defconfig
+        # Linux 6.18 bonding triggers unused-function warnings; defconfig may re-enable WERROR.
+        ./scripts/config --disable KERNEL_WERROR
+        make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
