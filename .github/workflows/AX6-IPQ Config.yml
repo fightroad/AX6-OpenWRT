@@ -155,7 +155,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: AX6-IPQ-config-${{ github.run_number }}
-          path: ${{ env.CONFIG_FILE }}
+          path: ${{ github.workspace }}/AX6-IPQ/.config
           retention-days: 30
 
       - name: Summary
