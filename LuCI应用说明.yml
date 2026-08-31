@@ -15,14 +15,12 @@ LuCI ---> Collections ---> luci-ssl-openssl              # LuCI HTTPS（OpenSSL�
 ## Applications（已安装）
 LuCI ---> Applications ---> luci-app-autoreboot          # 计划重启
 LuCI ---> Applications ---> luci-app-ddns-go             # 动态域名（ddns-go）
-LuCI ---> Applications ---> luci-app-firewall            # 防火墙
-LuCI ---> Applications ---> luci-app-openclash           # OpenClash 代理
-LuCI ---> Applications ---> luci-app-openvpn-server      # OpenVPN 服务端
+LuCI ---> Applications ---> luci-app-firewall            # 防火墙（firewall4 / nftables）
 LuCI ---> Applications ---> luci-app-package-manager     # 软件包管理（opkg）
-LuCI ---> Applications ---> luci-app-passwall              # Passwall 代理
+LuCI ---> Applications ---> luci-app-passwall              # Passwall 代理（本固件唯一梯子前端）
 LuCI ---> Applications ---> luci-app-ramfree               # 释放内存
 LuCI ---> Applications ---> luci-app-uhttpd                # uHTTPd Web 服务器
-LuCI ---> Applications ---> luci-app-upnp                  # UPnP 端口转发
+LuCI ---> Applications ---> luci-app-upnp                  # UPnP 端口转发（miniupnpd-nftables）
 LuCI ---> Applications ---> luci-app-vlmcsd                # KMS 激活服务
 LuCI ---> Applications ---> luci-app-zerotier              # ZeroTier 组网
 
@@ -30,8 +28,9 @@ LuCI ---> Applications ---> luci-app-zerotier              # ZeroTier 组网
 LuCI ---> Applications ---> luci-app-passwall
     luci-app-passwall ---> Include Haproxy                 # 负载均衡
     luci-app-passwall ---> Include Sing-Box                # Sing-box 核心
-    luci-app-passwall ---> Include V2ray Geoview           # Geo 规则查看
+    luci-app-passwall ---> Include V2ray Geoview           # Geo 规则查看（未预装 Geodata，需界面更新）
     luci-app-passwall ---> Include Xray                    # Xray 核心
+    # 未勾选：V2ray_Geodata（Geo 数据不编入固件，首次使用请在规则管理里更新 GeoIP/GeoSite）
 
 ## Themes（主题）
 LuCI ---> Themes ---> luci-theme-argon                   # Argon 主题
@@ -48,6 +47,7 @@ Base system ---> zram-swap                               # ZRAM 交换分区
 # 已编入固件的见「第一节」，此处不再重复。
 
 ## 代理 / 科学上网
+LuCI ---> Applications ---> luci-app-openclash           # OpenClash（本固件未编入，与 Passwall 二选一）
 LuCI ---> Applications ---> luci-app-homeproxy            # HomeProxy（Sing-box 系）
 LuCI ---> Applications ---> luci-app-v2raya              # v2rayA
 LuCI ---> Applications ---> luci-app-gost                # Gost 代理
@@ -70,6 +70,7 @@ LuCI ---> Applications ---> luci-app-tor                 # Tor 匿名网络
     luci-app-passwall ---> Include Shadowsocks_Rust_Server  # SS Rust 服务端
 
 ## VPN 服务端 / 客户端
+LuCI ---> Applications ---> luci-app-openvpn-server      # OpenVPN 服务端（本固件未编入）
 LuCI ---> Applications ---> luci-app-ipsec-vpnd          # IPSec VPN 服务端
 LuCI ---> Applications ---> luci-app-libreswan           # Libreswan IPSec
 LuCI ---> Applications ---> luci-app-ocserv              # OpenConnect VPN
@@ -254,7 +255,8 @@ LuCI ---> Applications ---> luci-app-example             # LuCI 示例（开发�
 # =============================================================================
 # 以下多见于旧版 LEDE/Lean 固件，ImmortalWrt main 中可能已移除或不再维护。
 
-LuCI ---> Applications ---> luci-app-ssr-plus            # 已淘汰，请用 Passwall / OpenClash
+LuCI ---> Applications ---> luci-app-ssr-plus            # 已淘汰，请用 Passwall
+LuCI ---> Applications ---> luci-app-openclash           # 与 Passwall 二选一，本固件默认未编入
 LuCI ---> Applications ---> luci-app-adbyby-plus         # 广告屏蔽大师，已过时
 LuCI ---> Applications ---> luci-app-flowoffload         # 与 NSS 冲突，勿开
 LuCI ---> Applications ---> luci-app-sfe                   # 与 NSS 冲突，勿开
@@ -270,7 +272,9 @@ LuCI ---> Applications ---> luci-app-xlnetacc              # 迅雷快鸟，已�
 #    本固件面向 redmi_ax6-stock + NSS，防火墙中不要额外开启硬件/软件流量分载（flowoffload、sfe 等）。
 
 # 2. 代理插件
-#    Passwall 与 OpenClash 均已编入固件，但同一时间只建议运行其中一个。
+#    本固件仅编入 Passwall（Xray + Sing-Box + Geoview）。
+#    未编入 OpenClash；若自行勾选编译，也不要与 Passwall 同时运行。
+#    首次使用请在 Passwall → 规则管理 中更新 GeoIP / GeoSite（未预装 Geodata 包）。
 
 # 3. 包管理
 #    本固件使用 opkg；在线安装插件优先用「系统 → 软件包」，自编译固件勿混用官方 kmod 源。
@@ -283,7 +287,9 @@ LuCI ---> Protocols ---> luci-proto-ipv6
 LuCI ---> Protocols ---> luci-proto-ppp
 
 # 5. 配置变更流程
-#    修改 menuconfig → 导出/提交 AX6-IPQ/.config → 运行 Build OpenWRT for AX6-NSS → Releases 下载固件
+#    编辑 AX6-IPQ/.config，或运行 AX6-IPQ Config（会执行 make defconfig 同步上游依赖）
+#    → 提交 .config → 运行 Build OpenWRT for AX6-NSS → Releases 下载固件
+#    取消 LuCI 插件不会自动去掉 openvpn-openssl 等依赖包，需在 menuconfig 中手动取消。
 
 
 # =============================================================================
