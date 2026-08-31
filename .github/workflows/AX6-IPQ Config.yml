@@ -149,13 +149,16 @@ jobs:
           echo "已收到 continue，继续导出配置..."
 
       - name: Export config
-        run: cp openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE"
+        run: |
+          test -f openwrt/.config || { echo "::error::openwrt/.config 不存在"; exit 1; }
+          cp openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE"
+          ls -la openwrt/.config "$GITHUB_WORKSPACE/$CONFIG_FILE"
 
       - name: Upload config
         uses: actions/upload-artifact@v4
         with:
           name: AX6-IPQ-config-${{ github.run_number }}
-          path: openwrt/.config
+          path: ${{ env.CONFIG_FILE }}
           retention-days: 30
 
       - name: Summary
