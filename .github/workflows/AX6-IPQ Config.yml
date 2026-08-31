@@ -71,8 +71,12 @@ jobs:
           fi
 
           SSH_PASSWORD=$(openssl rand -hex 16)
+          WORKSPACE="${GITHUB_WORKSPACE}"
+          OPENWRT_DIR="${WORKSPACE}/openwrt"
 
           sudo apt-get -qq install -y openssh-server
+          echo "export GITHUB_WORKSPACE=${WORKSPACE}" | sudo tee /etc/profile.d/github-workspace.sh > /dev/null
+          sudo chmod 644 /etc/profile.d/github-workspace.sh
           echo "runner:${SSH_PASSWORD}" | sudo chpasswd
           sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
           sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
@@ -127,9 +131,11 @@ jobs:
           echo "  ssh -p ${FRP_REMOTE_PORT} runner@${FRP_SERVER_ADDR}"
           echo "  密码: ${SSH_PASSWORD}"
           echo ""
-          echo "连上后："
-          echo "  cd \$GITHUB_WORKSPACE/openwrt && make menuconfig"
-          echo "  cd \$GITHUB_WORKSPACE && touch continue"
+          echo "连上后（请直接复制下面完整路径）："
+          echo "  cd ${OPENWRT_DIR} && make menuconfig"
+          echo "  touch ${WORKSPACE}/continue"
+          echo ""
+          echo "若 \$GITHUB_WORKSPACE 为空，先执行: source /etc/profile.d/github-workspace.sh"
           echo "=============================================="
 
           DEADLINE=$(( $(date +%s) + 7200 ))
@@ -158,11 +164,8 @@ jobs:
             echo "### 配置已导出"
             echo ""
             if [ "${{ inputs.ssh }}" = "true" ]; then
-              echo "**SSH 模式（FRP）**：在 **SSH menuconfig via FRP** 步骤日志里查看连接命令和随机密码，连上后执行："
-              echo "\`\`\`bash"
-              echo "cd \$GITHUB_WORKSPACE/openwrt && make menuconfig"
-              echo "cd \$GITHUB_WORKSPACE && touch continue"
-              echo "\`\`\`"
+              echo "**SSH 模式（FRP）**：在 **SSH menuconfig via FRP** 步骤日志里复制完整路径和密码。"
+              echo "连上后日志里会有 \`cd /home/runner/work/.../openwrt && make menuconfig\` 等命令。"
               echo ""
             else
               echo "已执行 \`make defconfig\` 同步配置（未进 menuconfig）。"
