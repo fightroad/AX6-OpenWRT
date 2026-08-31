@@ -1,34 +1,23 @@
-### 自用AX6一键编译脚本
-- IMM官方项目没有NSS加速，要编译没有nss加速的是首选！
+### 自用 Redmi AX6（大分区）一键编译
 
-- LEDE显示有nss，但是测试WIFI有问题，内网中上传速度特别慢。
+基于 [VIKINGYFY/immortalwrt](https://github.com/VIKINGYFY/immortalwrt.git) `main`，目标机型 **redmi_ax6-stock**，带 NSS 加速。
 
-- 以下两个项目是支持大分区，而且带NSS加速！
+## Workflows
 
-1、LiBwrt：https://github.com/LiBwrt-op/openwrt-6.x.git build-AX6-IPQ脚本【该项目近期发现nss加速启动不了】
-2、VIKINGYFY： https://github.com/VIKINGYFY/immortalwrt.git build-AX6-NSS脚本【该项目nss加速满血，500m跑满cpu占用个位数!】
+| Workflow | 说明 |
+|----------|------|
+| **AX6-IPQ Config** | 同步/编辑 `.config`（可选 SSH menuconfig） |
+| **Build OpenWRT for AX6-NSS** | 云编译固件 |
 
-- 注意：
-nss加速默认是开启的，不要去防火墙里打开系统的硬件或软件卸载加速，会有不可预测的冲突！
-测试只要跑大流量cpu占用很低或没有就是NSS加速在起作用了！  
-在线ipk软件源：  
-src/gz immortalwrt_core https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/targets/qualcommax/ipq807x/packages/  
-src/gz immortalwrt_base https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/base  
-src/gz immortalwrt_luci https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/luci  
-src/gz immortalwrt_packages https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/packages  
-src/gz immortalwrt_routing https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/routing  
-src/gz immortalwrt_telephony https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_cortex-a53/telephony  
+配置目录：`AX6-IPQ/`（`.config`、`diy.sh`、`files/`）
 
-- 高通OPENWRT其他大佬项目：
+## 注意
 
-下面的这些项目带nss加速，但是只支持官方的分区！
+- NSS 加速默认开启，**不要**在防火墙里额外打开系统硬件/软件卸载加速，容易冲突。
+- 大流量时 CPU 占用很低，说明 NSS 在起作用。
+- 固件使用 **apk** 包管理器；插件建议在编译时勾选打进固件，自编译内核不建议依赖官方在线源装 kmod。
 
-https://github.com/JiaY-shi/openwrt.git
+家用日常使用稳定运行 100+ 天，开梯子内存剩余约 100MB。
 
-https://github.com/qosmio/openwrt-ipq.git
-
-https://github.com/King-Of-Knights/openwrt-6.x.git
-
-家用日常使用稳定运行了100多天了，开梯子内存剩余基本在100m左右。
 ![image](https://github.com/user-attachments/assets/89a32e90-f5e1-4f46-9d54-9ba8c6e85f9e)
 ![微信截图_20241116071804](https://github.com/user-attachments/assets/502012e5-83d0-4e4b-be8b-a53c1edd0f8b)
