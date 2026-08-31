@@ -1,218 +1,293 @@
-选择LuCI 配置 添加插件应用：常用
------------------------------------------------------------------------------------------
-LuCI ---> Applications ---> luci-app-accesscontrol  #访问时间控制
-LuCI ---> Applications ---> luci-app-adbyby-plus   #广告屏蔽大师Plus +
-LuCI ---> Applications ---> luci-app-arpbind  #IP/MAC绑定
-LuCI ---> Applications ---> luci-app-autoreboot  #支持计划重启
-LuCI ---> Applications ---> luci-app-ddns   #动态域名 DNS（集成阿里DDNS客户端）
-LuCI ---> Applications ---> luci-app-filetransfer  #文件传输（可web安装ipk包）
-LuCI ---> Applications ---> luci-app-firewall   #添加防火墙
-LuCI ---> Applications ---> luci-app-flowoffload  #Turbo ACC网络加速（集成FLOW,BBR,NAT,DNS...
-LuCI ---> Applications ---> luci-app-frpc   #内网穿透 Frp
-LuCI ---> Applications ---> luci-app-guest-wifi  #WiFi访客网络
-LuCI ---> Applications ---> luci-app-ipsec-vpnd  #vpn服务器 IPSec
-LuCI ---> Applications ---> luci-app-mwan3   #MWAN3负载均衡
-LuCI ---> Applications ---> luci-app-mwan3helper   #MWAN3分流助手
-LuCI ---> Applications ---> luci-app-nlbwmon   #网络带宽监视器
-LuCI ---> Applications ---> luci-app-ramfree  #释放内存
-LuCI ---> Applications ---> luci-app-samba   #网络共享（Samba）
-LuCI ---> Applications ---> luci-app-sqm  #流量智能队列管理（QOS）
--------------------------------------------------------------------------------------------
-LuCI ---> Applications ---> luci-app-ssr-plus   #ssr低调上网Plus+
-    luci-app-ssr-plus ---> Include shadowsocks v2ray Plugin  #SS v2ray插件   *
-    luci-app-ssr-plus ---> Include v2ray  #v2ray代理
-    luci-app-ssr-plus ---> Include Trojan  #Trojan代理
-    luci-app-ssr-plus ---> Include red---socks2  #red---socks2代理   *
-    luci-app-ssr-plus ---> Include Kcptun  #Kcptun加速
-    luci-app-ssr-plus ---> Include ShadowsocksR Server  #ssr服务器
--------------------------------------------------------------------------------------------
-LuCI ---> Applications ---> luci-app-syncdial  #多拨虚拟网卡（原macvlan）
-LuCI ---> Applications ---> luci-app-unblockmusic  #解锁网易云灰色歌曲3合1新版本
-LuCI ---> Applications ---> luci-app-upnp   #通用即插即用UPnP（端口自动转发）
-LuCI ---> Applications ---> luci-app-vlmcsd  #KMS服务器设置
-LuCI ---> Applications ---> luci-app-vsftpd  #FTP服务器
-LuCI ---> Applications ---> luci-app-wifischedule  #WiFi 计划
-LuCI ---> Applications ---> luci-app-wireleShadowsocksRegdb  #WiFi无线
-LuCI ---> Applications ---> luci-app-wol   #WOL网络唤醒
-LuCI ---> Applications ---> luci-app-wrtbwmon  #实时流量监测
-LuCI ---> Applications ---> luci-app-xlnetacc  #迅雷快鸟
-LuCI ---> Applications ---> luci-app-zerotier  #ZeroTier内网穿透
-Extra packages  --->  ipv6helper  #支持 ipv6
-Utilities  --->  open-vm-tools  #打开适用于VMware的VM Tools
+# LuCI 应用说明
+# 适用于本仓库 AX6-IPQ/.config（VIKINGYFY/immortalwrt main · redmi_ax6-stock · NSS）
+# menuconfig 路径格式：LuCI → Applications → luci-app-xxx
+# 修改配置：编辑 AX6-IPQ/.config，或运行 AX6-IPQ Config（可选 SSH menuconfig）
 
 
+# =============================================================================
+# 一、本固件已勾选（当前 AX6-IPQ/.config）
+# =============================================================================
 
-以下是全部：                               注：应用后面标记 “ * ” 为最近新添加
------------------------------------------------------------------------------------------
-LuCI ---> Applications ---> luci-app-accesscontrol  #访问时间控制
-LuCI ---> Applications ---> luci-app-acme  #ACME自动化证书管理环境
-LuCI ---> Applications ---> luci-app-adblock   #ADB广告过滤
-LuCI ---> Applications ---> luci-app-adbyby-plus  #广告屏蔽大师Plus +
-LuCI ---> Applications ---> luci-app-adbyby   #广告过滤大师（已弃）
-LuCI ---> Applications ---> luci-app-adkill   #广告过滤（已弃）
-LuCI ---> Applications ---> luci-app-advanced-reboot  #Linksys高级重启
-LuCI ---> Applications ---> luci-app-ahcp  #支持AHCPd
-LuCI ---> Applications ---> luci-app-aliddns   #阿里DDNS客户端（已弃，集成至ddns）
-LuCI ---> Applications ---> luci-app-amule  #aMule下载工具
-LuCI ---> Applications ---> luci-app-aria2 # Aria2下载工具
-LuCI ---> Applications ---> luci-app-arpbind  #IP/MAC绑定
-LuCI ---> Applications ---> luci-app-asterisk  #支持Asterisk电话服务器
-LuCI ---> Applications ---> luci-app-attendedsysupgrade  #固件更新升级相关
-LuCI ---> Applications ---> luci-app-autoreboot  #支持计划重启
-LuCI ---> Applications ---> luci-app-baidupcs-web  #百度网盘管理
-LuCI ---> Applications ---> luci-app-bcp38  #BCP38网络入口过滤（不确定）
-LuCI ---> Applications ---> luci-app-bird1-ipv4  #对Bird1-ipv4的支持
-LuCI ---> Applications ---> luci-app-bird1-ipv6  #对Bird1-ipv6的支持
-LuCI ---> Applications ---> luci-app-bird4   #Bird 4（未知）（已弃）
-LuCI ---> Applications ---> luci-app-bird6   #Bird 6（未知）（已弃）
-LuCI ---> Applications ---> luci-app-bmx6  #BMX6路由协议
-LuCI ---> Applications ---> luci-app-bmx7  #BMX7路由协议
-LuCI ---> Applications ---> luci-app-caldav  #联系人（已弃）
-LuCI ---> Applications ---> luci-app-cifsd  #网络共享CIFS/SMB服务器   *
-LuCI ---> Applications ---> luci-app-cjdns  #加密IPV6网络相关
-LuCI ---> Applications ---> luci-app-clamav  #ClamAV杀毒软件
-LuCI ---> Applications ---> luci-app-commands   #Shell命令模块
-LuCI ---> Applications ---> luci-app-cshark   #CloudShark捕获工具
-LuCI ---> Applications ---> luci-app-ddns   #动态域名 DNS（集成阿里DDNS客户端）
-LuCI ---> Applications ---> luci-app-diag-core   #core诊断工具
-LuCI ---> Applications ---> luci-app-diskman   #磁盘管理工具   *
-    luci-app-diskman ---> Include btrfs-progs   #新型的写时复制 (COW)
-    luci-app-diskman ---> Include lsblk   #lsblk命令 用于列出所有可用块设备的信息
-    luci-app-diskman ---> Include mdadm   #mdadm命令 用于创建、管理、监控RAID设备的工具
-    luci-app-diskman ---> Include kmod-md-raid456   #RAID 4,5,6 驱动程序模块
-    luci-app-diskman ---> Include kmod-md-linear   #RAID 驱动程序模块
-LuCI ---> Applications ---> luci-app-dnscrypt-proxy  #DNSCrypt解决DNS污染
-LuCI ---> Applications ---> luci-app-dnsforwarder  #DNSForwarder防DNS污染
-LuCI ---> Applications ---> luci-app-dnspod  #DNSPod动态域名解析（已弃）
-LuCI ---> Applications ---> luci-app-dockerman  #Docker容器   *
-LuCI ---> Applications ---> luci-app-dump1090  #民航无线频率（不确定）
-LuCI ---> Applications ---> luci-app-dynapoint  #DynaPoint（未知）
-LuCI ---> Applications ---> luci-app-e2guardian   #Web内容过滤器
-LuCI ---> Applications ---> luci-app-familycloud   #家庭云盘
-LuCI ---> Applications ---> luci-app-filetransfer  #文件传输（可web安装ipk包）
-LuCI ---> Applications ---> luci-app-firewall   #添加防火墙
-LuCI ---> Applications ---> luci-app-flowoffload  #Turbo ACC网络加速（集成FLOW,BBR,NAT,DNS...
-LuCI ---> Applications ---> luci-app-freifunk-diagnostics   #freifunk组件 诊断（未知）
-LuCI ---> Applications ---> luci-app-freifunk-policyrouting  #freifunk组件 策略路由（未知）
-LuCI ---> Applications ---> luci-app-freifunk-widgets  #freifunk组件 索引（未知）
-LuCI ---> Applications ---> luci-app-frpc   #内网穿透Frp客户端
-LuCI ---> Applications ---> luci-app-frps   #内网穿透Frp服务端   *
-LuCI ---> Applications ---> luci-app-fwknopd  #Firewall Knock Operator服务器
-LuCI ---> Applications ---> luci-app-guest-wifi   #WiFi访客网络
-LuCI ---> Applications ---> luci-app-gfwlist   #GFW域名列表（已弃）
-LuCI ---> Applications ---> luci-app-haproxy-tcp   #HAProxy负载均衡-TCP
-LuCI ---> Applications ---> luci-app-hd-idle  #硬盘休眠
-LuCI ---> Applications ---> luci-app-hnet  #Homenet Status家庭网络控制协议
-LuCI ---> Applications ---> luci-app-ipsec-vpnd  #vpn服务器 IPSec
-LuCI ---> Applications ---> luci-app-kodexplorer  #KOD可道云私人网盘
-LuCI ---> Applications ---> luci-app-kooldns  #vpn服务器 ddns替代方案（已弃）
-LuCI ---> Applications ---> luci-app-koolproxy  #KP去广告（已弃）
-LuCI ---> Applications ---> luci-app-lxc   #LXC容器管理
-LuCI ---> Applications ---> luci-app-meshwizard #网络设置向导
-LuCI ---> Applications ---> luci-app-minidlna   #完全兼容DLNA / UPnP-AV客户端的服务器软件
-LuCI ---> Applications ---> luci-app-mjpg-streamer   #兼容Linux-UVC的摄像头程序
-LuCI ---> Applications ---> luci-app-mtwifi  #MTWiFi驱动的支持   *
-LuCI ---> Applications ---> luci-app-mmc-over-gpio   #添加SD卡操作界面（已弃）
-LuCI ---> Applications ---> luci-app-multiwan   #多拨虚拟网卡（已弃，移至syncdial）
-LuCI ---> Applications ---> luci-app-mwan   #MWAN负载均衡（已弃）
-LuCI ---> Applications ---> luci-app-mwan3   #MWAN3负载均衡
-LuCI ---> Applications ---> luci-app-mwan3helper   #MWAN3分流助手
-LuCI ---> Applications ---> luci-app-n2n_v2   #N2N内网穿透 N2N v2 vpn服务
-LuCI ---> Applications ---> luci-app-netdata  #Netdata实时监控（图表）
-LuCI ---> Applications ---> luci-app-nft-qos  #QOS流控 Nftables版
-LuCI ---> Applications ---> luci-app-ngrokc  #Ngrok 内网穿透（已弃）
-LuCI ---> Applications ---> luci-app-nlbwmon   #网络带宽监视器
-LuCI ---> Applications ---> luci-app-noddos  #NodDOS Clients 阻止DDoS攻击
-LuCI ---> Applications ---> luci-app-nps  #内网穿透nps   *
-LuCI ---> Applications ---> luci-app-ntpc   #NTP时间同步服务器
-LuCI ---> Applications ---> luci-app-ocserv  #OpenConnect vpn服务
-LuCI ---> Applications ---> luci-app-olsr  #OLSR配置和状态模块
-LuCI ---> Applications ---> luci-app-olsr-services  #OLSR服务器
-LuCI ---> Applications ---> luci-app-olsr-viz   #OLSR可视化
-LuCI ---> Applications ---> luci-app-openvpn  #Openvpn客户端
-LuCI ---> Applications ---> luci-app-openvpn-server  #易于使用的Openvpn服务器 Web-UI
-LuCI ---> Applications ---> luci-app-oscam   #OSCAM服务器（已弃）
-LuCI ---> Applications ---> luci-app-p910nd   #打印服务器模块
-LuCI ---> Applications ---> luci-app-pagekitec   #Pagekite内网穿透客户端
-LuCI ---> Applications ---> luci-app-polipo  #Polipo代理(是一个小型且快速的网页缓存代理)
-LuCI ---> Applications ---> luci-app-pppoe-relay  #PPPoE NAT穿透 点对点协议（PPP）
-LuCI ---> Applications ---> luci-app-pptp-server  #vpn服务器 pptp（已弃）
-LuCI ---> Applications ---> luci-app-privoxy  #Privoxy网络代理(带过滤无缓存)
-LuCI ---> Applications ---> luci-app-qbittorrent  #BT下载工具（qBittorrent）
-LuCI ---> Applications ---> luci-app-qos   #流量服务质量(QoS)流控
-LuCI ---> Applications ---> luci-app-radicale   #CalDAV/CardDAV同步工具
-LuCI ---> Applications ---> luci-app-ramfree  #释放内存
-LuCI ---> Applications ---> luci-app-rp-pppoe-server  #Roaring Penguin PPPoE Server 服务器
-LuCI ---> Applications ---> luci-app-samba   #网络共享（Samba）
-LuCI ---> Applications ---> luci-app-samba4   #网络共享（Samba4）
-LuCI ---> Applications ---> luci-app-sfe  #Turbo ACC网络加速（flowoffload二选一）
-LuCI ---> Applications ---> luci-app-shadowsocks   #SS低调上网（已弃）
-LuCI ---> Applications ---> luci-app-shadowsocks-libev  #SS-libev服务端
-LuCI ---> Applications ---> luci-app-shairplay  #支持AirPlay功能
-LuCI ---> Applications ---> luci-app-siitwizard  #SIIT配置向导  SIIT-Wizzard
-LuCI ---> Applications ---> luci-app-simple-adblock  #简单的广告拦截
-LuCI ---> Applications ---> luci-app-smartdns  #SmartDNS本地服务器（已弃）
-LuCI ---> Applications ---> luci-app-softethervpn  #SoftEther vpn服务器  NAT穿透   *
-LuCI ---> Applications ---> luci-app-splash  #Client-Splash是无线MESH网络的一个热点认证系统
-LuCI ---> Applications ---> luci-app-sqm  #流量智能队列管理（QOS）
-LuCI ---> Applications ---> luci-app-squid   #Squid代理服务器
-LuCI ---> Applications ---> luci-app-ssr-plus   #ssr低调上网Plus+
-    luci-app-ssr-plus ---> Include shadowsocks New Version  #新SS代理（已弃）
-    luci-app-ssr-plus ---> Include shadowsocks Simple-obfs Plugin  #simple-obfs简单混淆工具（已弃）
-    luci-app-ssr-plus ---> Include shadowsocks v2ray Plugin  #SS v2ray插件   *
-    luci-app-ssr-plus ---> Include v2ray  #v2ray代理
-    luci-app-ssr-plus ---> Include Trojan  #Trojan代理
-    luci-app-ssr-plus ---> Include red---socks2  #red---socks2代理   *
-    luci-app-ssr-plus ---> Include Kcptun  #Kcptun加速
-    luci-app-ssr-plus ---> Include ShadowsocksR Server  #ssr服务器
-    luci-app-ssr-plus ---> Include DNS2SOCKS  #DNS服务器（已弃）
-    luci-app-ssr-plus ---> Include ShadowsocksR Socks and Tunnel #SSR代理（已弃）
-    luci-app-ssr-plus ---> Include Socks Server  #socks代理服务器（已弃）
-LuCI ---> Applications ---> luci-app-ssr-pro  #ssr-Pro（已弃）
-LuCI ---> Applications ---> luci-app-ssrserver-python  #ShadowsocksR Python服务器
-LuCI ---> Applications ---> luci-app-statistics  #流量监控工具
-LuCI ---> Applications ---> luci-app-syncdial  #多拨虚拟网卡（原macvlan）
-LuCI ---> Applications ---> luci-app-tinyproxy  #Tinyproxy是 HTTP(S)代理服务器
-LuCI ---> Applications ---> luci-app-transmission   #BT下载工具
-LuCI ---> Applications ---> luci-app-travelmate  #旅行路由器
-LuCI ---> Applications ---> luci-app-ttyd   #网页终端命令行
-LuCI ---> Applications ---> luci-app-udpxy  #udpxy做组播服务器
-LuCI ---> Applications ---> luci-app-uhttpd  #uHTTPd Web服务器
-LuCI ---> Applications ---> luci-app-unblockmusic  #解锁网易云灰色歌曲3合1新版本
-    UnblockNeteaseMusic Golang Version  #Golang版本   *
-    UnblockNeteaseMusic NodeJS Version  #NodeJS版本   *
-LuCI ---> Applications ---> luci-app-unblockneteasemusic-go  #解除网易云音乐（合并）
-LuCI ---> Applications ---> luci-app-unblockneteasemusic-mini  #解除网易云音乐（合并）
-LuCI ---> Applications ---> luci-app-unbound  #Unbound DNS解析器
-LuCI ---> Applications ---> luci-app-upnp   #通用即插即用UPnP（端口自动转发）
-LuCI ---> Applications ---> luci-app-usb-printer   #USB 打印服务器
-LuCI ---> Applications ---> luci-app-v2ray-server   #v2ray 服务器
-LuCI ---> Applications ---> luci-app-v2ray-pro  #v2ray透明代理（已弃，集成ssr）
-LuCI ---> Applications ---> luci-app-verysync  #微力同步   *
-LuCI ---> Applications ---> luci-app-vlmcsd  #KMS服务器设置
-LuCI ---> Applications ---> luci-app-vnstat   #vnStat网络监控（图表）
-LuCI ---> Applications ---> luci-app-vpnbypass  #vpn BypassWebUI  绕过vpn设置
-LuCI ---> Applications ---> luci-app-vsftpd  #FTP服务器
-LuCI ---> Applications ---> luci-app-watchcat  #断网检测功能与定时重启
-LuCI ---> Applications ---> luci-app-webadmin  #Web管理页面设置
-LuCI ---> Applications ---> luci-app-webshell  #网页命令行终端（已弃）
-LuCI ---> Applications ---> luci-app-wifischedule  #WiFi 计划
-LuCI ---> Applications ---> luci-app-wireguard  #vpn服务器 WireGuard状态
-LuCI ---> Applications ---> luci-app-wireless-regdb  #WiFi无线
-LuCI ---> Applications ---> luci-app-wol   #WOL网络唤醒
-LuCI ---> Applications ---> luci-app-wrtbwmon  #实时流量监测
-LuCI ---> Applications ---> luci-app-xlnetacc  #迅雷快鸟
-LuCI ---> Applications ---> luci-app-zerotier  #ZeroTier内网穿透
+## LuCI 框架
+LuCI ---> Collections ---> luci-light                    # 精简 LuCI 集合
+LuCI ---> Collections ---> luci-ssl-openssl              # LuCI HTTPS（OpenSSL）
 
----------------------------------------------------------------------------------------------------
-支持 iPv6：
-1、Extra packages  --->  ipv6helper  （选定这个后下面几项自动选择了）
-Network  --->  odhcp6c
-Network  --->  odhcpd-ipv6only
-LuCI  --->  Protocols  --->  luci-proto-ipv6
-LuCI  --->  Protocols  --->  luci-proto-ppp
+## Applications（已安装）
+LuCI ---> Applications ---> luci-app-autoreboot          # 计划重启
+LuCI ---> Applications ---> luci-app-ddns-go             # 动态域名（ddns-go）
+LuCI ---> Applications ---> luci-app-firewall            # 防火墙
+LuCI ---> Applications ---> luci-app-openclash           # OpenClash 代理
+LuCI ---> Applications ---> luci-app-openvpn-server      # OpenVPN 服务端
+LuCI ---> Applications ---> luci-app-package-manager     # 软件包管理（opkg）
+LuCI ---> Applications ---> luci-app-passwall              # Passwall 代理
+LuCI ---> Applications ---> luci-app-ramfree               # 释放内存
+LuCI ---> Applications ---> luci-app-uhttpd                # uHTTPd Web 服务器
+LuCI ---> Applications ---> luci-app-upnp                  # UPnP 端口转发
+LuCI ---> Applications ---> luci-app-vlmcsd                # KMS 激活服务
+LuCI ---> Applications ---> luci-app-zerotier              # ZeroTier 组网
+
+## Passwall 子选项（本固件已选）
+LuCI ---> Applications ---> luci-app-passwall
+    luci-app-passwall ---> Include Haproxy                 # 负载均衡
+    luci-app-passwall ---> Include Sing-Box                # Sing-box 核心
+    luci-app-passwall ---> Include V2ray Geoview           # Geo 规则查看
+    luci-app-passwall ---> Include Xray                    # Xray 核心
+
+## Themes（主题）
+LuCI ---> Themes ---> luci-theme-argon                   # Argon 主题
+LuCI ---> Themes ---> luci-theme-bootstrap                 # Bootstrap 默认主题
+
+## 相关系统包（非 LuCI，但配套启用）
+Base system ---> zram-swap                               # ZRAM 交换分区
 
 
+# =============================================================================
+# 二、可选应用（按需 menuconfig 勾选）
+# =============================================================================
+# 以下摘自当前 feeds 中的 luci-app 列表（与 AX6-IPQ/.config 同步），
+# 已编入固件的见「第一节」，此处不再重复。
+
+## 代理 / 科学上网
+LuCI ---> Applications ---> luci-app-homeproxy            # HomeProxy（Sing-box 系）
+LuCI ---> Applications ---> luci-app-v2raya              # v2rayA
+LuCI ---> Applications ---> luci-app-gost                # Gost 代理
+LuCI ---> Applications ---> luci-app-microsocks          # 轻量 SOCKS5
+LuCI ---> Applications ---> luci-app-sshtunnel           # SSH 隧道
+LuCI ---> Applications ---> luci-app-tinyproxy           # HTTP 代理
+LuCI ---> Applications ---> luci-app-squid               # Squid 代理
+LuCI ---> Applications ---> luci-app-privoxy             # Privoxy 过滤代理
+LuCI ---> Applications ---> luci-app-tor                 # Tor 匿名网络
+
+## Passwall 可选核心（在 luci-app-passwall 子菜单）
+    luci-app-passwall ---> Include Hysteria                 # Hysteria 协议
+    luci-app-passwall ---> Include NaiveProxy               # NaiveProxy
+    luci-app-passwall ---> Include Shadow_TLS               # Shadow-TLS
+    luci-app-passwall ---> Include Simple_Obfs              # simple-obfs 混淆
+    luci-app-passwall ---> Include V2ray_Plugin             # V2ray 插件
+    luci-app-passwall ---> Include Xray_Plugin              # Xray 插件
+    luci-app-passwall ---> Include V2ray_Geodata            # Geo 数据文件
+    luci-app-passwall ---> Include Shadowsocks_Rust_Client  # SS Rust 客户端
+    luci-app-passwall ---> Include Shadowsocks_Rust_Server  # SS Rust 服务端
+
+## VPN 服务端 / 客户端
+LuCI ---> Applications ---> luci-app-ipsec-vpnd          # IPSec VPN 服务端
+LuCI ---> Applications ---> luci-app-libreswan           # Libreswan IPSec
+LuCI ---> Applications ---> luci-app-ocserv              # OpenConnect VPN
+LuCI ---> Applications ---> luci-app-softether           # SoftEther VPN
+LuCI ---> Applications ---> luci-app-softethervpn        # SoftEther VPN（另一版）
+LuCI ---> Applications ---> luci-app-pppoe-server      # PPPoE 服务端
+LuCI ---> Applications ---> luci-app-rp-pppoe-server     # Roaring Penguin PPPoE
+LuCI ---> Applications ---> luci-app-pppoe-relay       # PPPoE 中继
+
+## 内网穿透 / 组网
+LuCI ---> Applications ---> luci-app-frpc                # FRP 客户端
+LuCI ---> Applications ---> luci-app-frps                # FRP 服务端
+LuCI ---> Applications ---> luci-app-xfrpc               # XFRP 客户端
+LuCI ---> Applications ---> luci-app-nps                 # NPS 内网穿透
+LuCI ---> Applications ---> luci-app-n2n                   # N2N VPN
+LuCI ---> Applications ---> luci-app-ngrokc                # Ngrok 客户端
+LuCI ---> Applications ---> luci-app-natmap              # NAT 打洞
+LuCI ---> Applications ---> luci-app-pagekitec           # Pagekite 穿透
+LuCI ---> Applications ---> luci-app-tailscale-community # Tailscale 组网
+LuCI ---> Applications ---> luci-app-cloudflared         # Cloudflare Tunnel
+
+## 广告过滤 / 家长控制
+LuCI ---> Applications ---> luci-app-adblock             # 广告过滤
+LuCI ---> Applications ---> luci-app-adblock-fast        # 快速广告过滤
+LuCI ---> Applications ---> luci-app-adguardhome         # AdGuard Home
+LuCI ---> Applications ---> luci-app-antiblock           # 反广告拦截检测
+LuCI ---> Applications ---> luci-app-banip             # IP 封禁
+LuCI ---> Applications ---> luci-app-appfilter           # 应用过滤 / 家长控制
+
+## DNS
+LuCI ---> Applications ---> luci-app-smartdns            # SmartDNS
+LuCI ---> Applications ---> luci-app-unbound             # Unbound 解析器
+LuCI ---> Applications ---> luci-app-nextdns             # NextDNS
+LuCI ---> Applications ---> luci-app-https-dns-proxy     # DNS over HTTPS 代理
+LuCI ---> Applications ---> luci-app-ddns                # 经典 DDNS（与 ddns-go 二选一）
+
+## 多 WAN / 策略路由
+LuCI ---> Applications ---> luci-app-mwan3               # 多 WAN 负载均衡
+LuCI ---> Applications ---> luci-app-pbr                 # 策略路由（Policy Based Routing）
+LuCI ---> Applications ---> luci-app-keepalived          # 高可用 VRRP
+LuCI ---> Applications ---> luci-app-syncdial            # 多拨
+
+## QoS / 流控
+LuCI ---> Applications ---> luci-app-sqm                 # 智能队列 SQM
+LuCI ---> Applications ---> luci-app-qosify              # QoSify（cake/fq_codel）
+LuCI ---> Applications ---> luci-app-eqos                # 简易 QoS
+LuCI ---> Applications ---> luci-app-qos-legacy          # 传统 QoS
+
+## 下载 / BT
+LuCI ---> Applications ---> luci-app-aria2              # Aria2 下载
+LuCI ---> Applications ---> luci-app-transmission        # Transmission BT
+LuCI ---> Applications ---> luci-app-qbittorrent         # qBittorrent BT
+LuCI ---> Applications ---> luci-app-amule               # aMule 下载
+
+## 文件共享 / 网盘
+LuCI ---> Applications ---> luci-app-samba4              # Samba 4 共享
+LuCI ---> Applications ---> luci-app-ksmbd               # KSMBD 共享
+LuCI ---> Applications ---> luci-app-cifs-mount          # CIFS 挂载
+LuCI ---> Applications ---> luci-app-nfs                 # NFS 共享
+LuCI ---> Applications ---> luci-app-minidlna            # DLNA 媒体服务器
+LuCI ---> Applications ---> luci-app-openlist            # OpenList 网盘
+LuCI ---> Applications ---> luci-app-rclone              # Rclone 同步（含 WebUI）
+LuCI ---> Applications ---> luci-app-dufs                # 简易 HTTP 文件服务
+LuCI ---> Applications ---> luci-app-filebrowser         # FileBrowser
+LuCI ---> Applications ---> luci-app-filebrowser-go        # FileBrowser（Go 版）
+LuCI ---> Applications ---> luci-app-filemanager         # 文件管理器
+LuCI ---> Applications ---> luci-app-vsftpd              # FTP 服务器
+
+## 存储 / 容器
+LuCI ---> Applications ---> luci-app-diskman             # 磁盘管理（分区/挂载）
+LuCI ---> Applications ---> luci-app-docker              # Docker
+LuCI ---> Applications ---> luci-app-dockerman           # Docker 管理（LuCI 界面）
+
+## 网络工具 / 监控
+LuCI ---> Applications ---> luci-app-arpbind             # IP/MAC 绑定
+LuCI ---> Applications ---> luci-app-acl                # 访问控制列表
+LuCI ---> Applications ---> luci-app-bcp38               # BCP38 入口过滤
+LuCI ---> Applications ---> luci-app-fwknopd             # 端口敲门
+LuCI ---> Applications ---> luci-app-crowdsec-firewall-bouncer  # CrowdSec 防火墙
+LuCI ---> Applications ---> luci-app-nlbwmon             # 带宽统计
+LuCI ---> Applications ---> luci-app-vnstat2             # vnStat 流量图表
+LuCI ---> Applications ---> luci-app-netdata             # Netdata 实时监控
+LuCI ---> Applications ---> luci-app-statistics          # 系统统计图表
+LuCI ---> Applications ---> luci-app-apinger             # 多目标 Ping 监控
+LuCI ---> Applications ---> luci-app-snmpd               # SNMP 监控
+LuCI ---> Applications ---> luci-app-lldpd               # LLDP 邻居发现
+
+## 系统维护
+LuCI ---> Applications ---> luci-app-watchcat            # 断网检测 / 定时重启
+LuCI ---> Applications ---> luci-app-attendedsysupgrade  # 在线固件升级助手
+LuCI ---> Applications ---> luci-app-advanced-reboot     # 高级重启（多分区切换）
+LuCI ---> Applications ---> luci-app-cpufreq             # CPU 调频
+LuCI ---> Applications ---> luci-app-cpulimit            # CPU 限速
+LuCI ---> Applications ---> luci-app-irqbalance          # IRQ 均衡
+LuCI ---> Applications ---> luci-app-fancontrol          # 风扇控制
+LuCI ---> Applications ---> luci-app-hd-idle             # 硬盘休眠
+LuCI ---> Applications ---> luci-app-chrony              # NTP 时间同步（Chrony）
+LuCI ---> Applications ---> luci-app-commands            # 自定义 Shell 命令
+LuCI ---> Applications ---> luci-app-ttyd                # 网页终端
+
+## 无线 / 漫游
+LuCI ---> Applications ---> luci-app-wifischedule        # WiFi 定时开关
+LuCI ---> Applications ---> luci-app-wifihistory         # WiFi 连接历史
+LuCI ---> Applications ---> luci-app-usteer               # 802.11r 漫游（usteer）
+LuCI ---> Applications ---> luci-app-dawn                # 频段引导 / 漫游
+LuCI ---> Applications ---> luci-app-travelmate          # 旅行路由器（多 AP 切换）
+LuCI ---> Applications ---> luci-app-wol                 # 网络唤醒（WOL）
+LuCI ---> Applications ---> luci-app-timewol             # 定时 WOL
+
+## 证书 / 安全
+LuCI ---> Applications ---> luci-app-acme                # ACME 自动申请证书（Let's Encrypt）
+
+## 主题 / 界面
+LuCI ---> Applications ---> luci-app-argon-config        # Argon 主题配置页
+LuCI ---> Themes ---> luci-theme-material                # Material 主题
+LuCI ---> Themes ---> luci-theme-openwrt-2020            # OpenWrt 2020 主题
+
+## 多媒体 / 娱乐
+LuCI ---> Applications ---> luci-app-airplay2            # AirPlay 2 接收
+LuCI ---> Applications ---> luci-app-unblockneteasemusic # 网易云灰色歌曲解锁
+LuCI ---> Applications ---> luci-app-music-remote-center  # 音乐远程控制
+LuCI ---> Applications ---> luci-app-spotifyd            # Spotify Connect
+LuCI ---> Applications ---> luci-app-udpxy              # 组播转单播
+LuCI ---> Applications ---> luci-app-rtp2httpd           # RTP 转 HTTP
+
+## 打印 / 串口 / 硬件
+LuCI ---> Applications ---> luci-app-p910nd              # 打印服务器
+LuCI ---> Applications ---> luci-app-usb-printer         # USB 打印机
+LuCI ---> Applications ---> luci-app-ser2net             # 串口转网络
+LuCI ---> Applications ---> luci-app-athena-led          # LED 控制
+LuCI ---> Applications ---> luci-app-oled                # OLED 显示屏
+LuCI ---> Applications ---> luci-app-sfp-info            # SFP 光模块信息
+
+## 蜂窝 / 校园网 / 特殊拨号
+LuCI ---> Applications ---> luci-app-modemband           # 模组频段查询
+LuCI ---> Applications ---> luci-app-3ginfo-lite       # 3G/4G 模组信息
+LuCI ---> Applications ---> luci-app-bitsrunlogin-go   # 比特彗星校园网认证
+LuCI ---> Applications ---> luci-app-njitclient        # 南京理工校园网
+LuCI ---> Applications ---> luci-app-scutclient          # 华南理工校园网
+LuCI ---> Applications ---> luci-app-sysuh3c             # 中山大学 H3C 认证
+LuCI ---> Applications ---> luci-app-ua2f               # UA 伪造（校园网）
+
+## 同步 / 协作 / 其他
+LuCI ---> Applications ---> luci-app-syncthing            # Syncthing 文件同步
+LuCI ---> Applications ---> luci-app-radicale3           # CalDAV/CardDAV
+LuCI ---> Applications ---> luci-app-rustdesk-server    # RustDesk 远程桌面
+LuCI ---> Applications ---> luci-app-wechatpush        # 微信推送通知
+LuCI ---> Applications ---> luci-app-email              # 邮件告警
+LuCI ---> Applications ---> luci-app-clamav              # ClamAV 杀毒
+LuCI ---> Applications ---> luci-app-mosquitto          # MQTT 服务器
+LuCI ---> Applications ---> luci-app-openthread          # OpenThread 组网
+LuCI ---> Applications ---> luci-app-openwisp           # OpenWISP 远程管理
+LuCI ---> Applications ---> luci-app-bmx7               # BMX7 网状路由
+LuCI ---> Applications ---> luci-app-olsr                # OLSR 路由
+LuCI ---> Applications ---> luci-app-olsr-services       # OLSR 服务
+LuCI ---> Applications ---> luci-app-olsr-viz            # OLSR 可视化
+LuCI ---> Applications ---> luci-app-cjdns              # cjdns 加密网络
+LuCI ---> Applications ---> luci-app-babeld             # babeld 路由
+LuCI ---> Applications ---> luci-app-coovachilli       # 热点认证（CoovaChilli）
+LuCI ---> Applications ---> luci-app-dump1090           # ADS-B 飞机追踪
+LuCI ---> Applications ---> luci-app-oscam              # OSCam 电视卡
+LuCI ---> Applications ---> luci-app-ps3netsrv          # PS3 媒体服务器
+LuCI ---> Applications ---> luci-app-nut                # UPS 电源管理
+LuCI ---> Applications ---> luci-app-lorawan-basicstation  # LoRaWAN 基站
+LuCI ---> Applications ---> luci-app-ustreamer          # USB 摄像头推流
+LuCI ---> Applications ---> luci-app-omcproxy           # IGMP/MLD 代理
+LuCI ---> Applications ---> luci-app-dcwapd             # 双频 WiFi 聚合
+LuCI ---> Applications ---> luci-app-eoip               # EoIP 隧道
+LuCI ---> Applications ---> luci-app-cd8021x             # 802.1X 认证
+LuCI ---> Applications ---> luci-app-csshnpd            # SSH 主机密钥发布
+LuCI ---> Applications ---> luci-app-sms-tool-js          # 短信工具（需模组）
+LuCI ---> Applications ---> luci-app-msd_lite           # mSD Lite 音乐播放
+LuCI ---> Applications ---> luci-app-xinetd             # xinetd 超级服务器
+LuCI ---> Applications ---> luci-app-ledtrig-rssi       # LED RSSI 指示
+LuCI ---> Applications ---> luci-app-ledtrig-switch     # LED 交换机触发
+LuCI ---> Applications ---> luci-app-ledtrig-usbport     # LED USB 触发
+LuCI ---> Applications ---> luci-app-3cat                # 3CAT（专用）
+LuCI ---> Applications ---> luci-app-example             # LuCI 示例（开发用）
+
+# =============================================================================
+# 三、已过时或不建议在本项目使用的应用
+# =============================================================================
+# 以下多见于旧版 LEDE/Lean 固件，ImmortalWrt main 中可能已移除或不再维护。
+
+LuCI ---> Applications ---> luci-app-ssr-plus            # 已淘汰，请用 Passwall / OpenClash
+LuCI ---> Applications ---> luci-app-adbyby-plus         # 广告屏蔽大师，已过时
+LuCI ---> Applications ---> luci-app-flowoffload         # 与 NSS 冲突，勿开
+LuCI ---> Applications ---> luci-app-sfe                   # 与 NSS 冲突，勿开
+LuCI ---> Applications ---> luci-app-filetransfer        # 已由 luci-app-package-manager 替代
+LuCI ---> Applications ---> luci-app-xlnetacc              # 迅雷快鸟，已失效
 
 
-信息来源：https://www.right.com.cn/forum/thread-3682029-1-1.html
+# =============================================================================
+# 四、使用注意
+# =============================================================================
+
+# 1. NSS 加速
+#    本固件面向 redmi_ax6-stock + NSS，防火墙中不要额外开启硬件/软件流量分载（flowoffload、sfe 等）。
+
+# 2. 代理插件
+#    Passwall 与 OpenClash 均已编入固件，但同一时间只建议运行其中一个。
+
+# 3. 包管理
+#    本固件使用 opkg；在线安装插件优先用「系统 → 软件包」，自编译固件勿混用官方 kmod 源。
+
+# 4. IPv6 支持（按需勾选）
+Extra packages ---> ipv6helper                           # 勾选后相关依赖会自动带上
+Network ---> odhcp6c
+Network ---> odhcpd-ipv6only
+LuCI ---> Protocols ---> luci-proto-ipv6
+LuCI ---> Protocols ---> luci-proto-ppp
+
+# 5. 配置变更流程
+#    修改 menuconfig → 导出/提交 AX6-IPQ/.config → 运行 Build OpenWRT for AX6-NSS → Releases 下载固件
+
+
+# =============================================================================
+# 参考
+# =============================================================================
+# ImmortalWrt LuCI 应用以 VIKINGYFY/immortalwrt feeds 实际列表为准。
+# 历史整理来源：https://www.right.com.cn/forum/thread-3682029-1-1.html
