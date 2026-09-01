@@ -19,9 +19,12 @@ git_sparse_clone main https://github.com/fightroad/luci-app-easytier easytier ea
 # Socat 端口转发 LuCI（Lienol 版，兼容新版 socat，配置用 luci_socat 不冲突）
 git_sparse_clone main https://github.com/Lienol/openwrt-package luci-app-socat
 
-#添加科学上网源
-#git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
-#git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
+# PassWall 科学上网（xiaorouji 源，替换 feeds 自带版本）
+rm -rf feeds/packages/net/{xray-core,v2ray-geoip,v2ray-geodata,v2ray-geosite,v2ray-geosite-ir,sing-box,chinadns-ng,dns2socks,hysteria,ipt2socks,microsocks,naiveproxy,shadowsocks-rust,shadowsocksr-libev,simple-obfs,tcping,v2ray-plugin,xray-plugin,geoview,shadow-tls}
+rm -rf feeds/luci/applications/luci-app-passwall
+rm -rf package/openwrt-passwall-packages package/openwrt-passwall
+git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
+git clone --depth 1 https://github.com/xiaorouji/openwrt-package package/openwrt-passwall
 #git clone --depth 1 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 #git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 #git clone --depth 1 https://github.com/sirpdboy/luci-app-ddns-go package/ddnsgo
@@ -50,8 +53,6 @@ git_sparse_clone main https://github.com/Lienol/openwrt-package luci-app-socat
 #rm -rf feeds/packages/net/ddns-go
 #rm -rf feeds/packages/net/alist
 #rm -rf feeds/luci/applications/luci-app-alist
-#rm -rf feeds/luci/applications/openwrt-passwall
-
 
 #修改默认IP
 #sed -i 's/192.168.1.1/192.168.123.1/g' package/base-files/files/bin/config_generate

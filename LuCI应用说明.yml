@@ -28,9 +28,9 @@ LuCI ---> Applications ---> luci-app-zerotier              # ZeroTier 组网
 LuCI ---> Applications ---> luci-app-passwall
     luci-app-passwall ---> Include Haproxy                 # 负载均衡
     luci-app-passwall ---> Include Sing-Box                # Sing-box 核心
-    luci-app-passwall ---> Include V2ray Geoview           # Geo 规则查看（未预装 Geodata，需界面更新）
+    luci-app-passwall ---> Include V2ray Geoview           # Geo 规则查看
+    luci-app-passwall ---> Include V2ray Geodata           # GeoIP / GeoSite 数据（已编入固件）
     luci-app-passwall ---> Include Xray                    # Xray 核心
-    # 未勾选：V2ray_Geodata（Geo 数据不编入固件，首次使用请在规则管理里更新 GeoIP/GeoSite）
 
 ## Themes（主题）
 LuCI ---> Themes ---> luci-theme-argon                   # Argon 主题
@@ -272,9 +272,8 @@ LuCI ---> Applications ---> luci-app-xlnetacc              # 迅雷快鸟，已�
 #    本固件面向 redmi_ax6-stock + NSS，防火墙中不要额外开启硬件/软件流量分载（flowoffload、sfe 等）。
 
 # 2. 代理插件
-#    本固件仅编入 Passwall（Xray + Sing-Box + Geoview）。
+#    本固件仅编入 Passwall（Xray + Sing-Box + Geoview + Geodata，xiaorouji 源编译）。
 #    未编入 OpenClash；若自行勾选编译，也不要与 Passwall 同时运行。
-#    首次使用请在 Passwall → 规则管理 中更新 GeoIP / GeoSite（未预装 Geodata 包）。
 
 # 3. 包管理
 #    本固件使用 opkg；在线安装插件优先用「系统 → 软件包」，自编译固件勿混用官方 kmod 源。
