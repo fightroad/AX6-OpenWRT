@@ -10,6 +10,9 @@ function git_sparse_clone() {
 }
 
 # Add packages
+# EasyTier 组网（稀疏克隆，menuconfig 里自选 easytier / easytier-noweb）
+git_sparse_clone main https://github.com/fightroad/luci-app-easytier easytier easytier-noweb luci-app-easytier version.mk
+
 #添加科学上网源
 #git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
 #git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
