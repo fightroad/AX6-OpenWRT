@@ -1,0 +1,16 @@
+首先备份各个分区，然后把 ax6-mibib-stock.bin 和 ax6-uboot-stock.bin 上传到 /tmp/ ，然后运行下面命令刷机，mtd verify 提示绿色 Success 即表示刷入成功。
+
+mtd erase /dev/mtd1
+mtd write /tmp/ax6-mibib-stock.bin /dev/mtd1
+mtd verify /tmp/ax6-mibib-stock.bin /dev/mtd1
+
+mtd erase /dev/mtd7
+mtd write /tmp/ax6-uboot-stock.bin /dev/mtd7
+mtd verify /tmp/ax6-uboot-stock.bin /dev/mtd7
+
+刷入成功后请直接断电，然后按住reset上电，电脑设置IP 192.168.1.10 ,清除浏览器缓存后输入 192.168.1.1 进入UBOOT，上传factory固件升级即可。
+
+查看分区布局
+cat /proc/mtd
+查看分区大小
+cat /proc/partitions
