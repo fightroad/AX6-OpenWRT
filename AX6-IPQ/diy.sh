@@ -13,6 +13,9 @@ function git_sparse_clone() {
 # EasyTier 组网（稀疏克隆，menuconfig 里自选 easytier / easytier-noweb）
 git_sparse_clone main https://github.com/fightroad/luci-app-easytier easytier easytier-noweb luci-app-easytier version.mk
 
+# Socat 端口转发 LuCI（Lienol 版，兼容新版 socat，配置用 luci_socat 不冲突）
+git_sparse_clone main https://github.com/Lienol/openwrt-package luci-app-socat
+
 #添加科学上网源
 #git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
 #git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
@@ -36,10 +39,6 @@ git_sparse_clone main https://github.com/fightroad/luci-app-easytier easytier ea
 #sed -i 's/services/vpn/g' package/luci-app-openvpn-server/luasrc/view/openvpn/*.htm
 
 #git clone -b js https://github.com/papagaye744/luci-theme-design package/luci-theme-design
-
-#替换luci-app-socat为https://github.com/chenmozhijin/luci-app-socat
-#rm -rf feeds/luci/applications/luci-app-socat
-#git_sparse_clone main https://github.com/chenmozhijin/luci-app-socat luci-app-socat
 
 #删除库中的插件，使用自定义源中的包。
 #rm -rf feeds/luci/themes/luci-theme-argon
