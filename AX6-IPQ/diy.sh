@@ -25,6 +25,14 @@ rm -rf feeds/luci/applications/luci-app-passwall
 rm -rf package/openwrt-passwall-packages package/openwrt-passwall
 git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
 git clone --depth 1 https://github.com/xiaorouji/openwrt-package package/openwrt-passwall
+
+# frp >= 0.67 编译 WebUI 需要 node，云编译易失败；luci-app-frpc 不依赖内置 WebUI
+FRP_MK="feeds/packages/net/frp/Makefile"
+if [ -f "$FRP_MK" ]; then
+  sed -i 's/PKG_BUILD_DEPENDS:=golang\/host node\/host/PKG_BUILD_DEPENDS:=golang\/host/' "$FRP_MK"
+  sed -i '/web\/frpc install/d; /web\/frps install/d; /) web ;/d' "$FRP_MK"
+fi
+
 #git clone --depth 1 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 #git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 #git clone --depth 1 https://github.com/sirpdboy/luci-app-ddns-go package/ddnsgo
