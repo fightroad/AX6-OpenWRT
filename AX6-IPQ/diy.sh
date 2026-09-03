@@ -25,6 +25,22 @@ rm -rf feeds/luci/applications/luci-app-passwall
 rm -rf package/openwrt-passwall-packages package/openwrt-passwall
 git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
 git clone --depth 1 https://github.com/xiaorouji/openwrt-package package/openwrt-passwall
+
+# frp：用官方预编译包替换 Imm 源码编译（避免 node/host 编 WebUI 失败）
+# 保留 feeds 里 Imm 的 files/（init、uci），LuCI 仍用官方 luci-app-frpc
+DIY_DIR="$(cd "$(dirname "$0")" && pwd)"
+FRP_SRC_MK="$DIY_DIR/frp/Makefile"
+FRP_DST_DIR="feeds/packages/net/frp"
+if [ ! -f "$FRP_SRC_MK" ]; then
+  echo "ERROR: missing $FRP_SRC_MK" >&2
+  exit 1
+fi
+if [ ! -d "$FRP_DST_DIR" ]; then
+  echo "ERROR: missing $FRP_DST_DIR (run feeds install first)" >&2
+  exit 1
+fi
+cp -f "$FRP_SRC_MK" "$FRP_DST_DIR/Makefile"
+echo "frp: using official prebuilt binary Makefile ($(grep '^PKG_VERSION:=' "$FRP_DST_DIR/Makefile"))"
 #git clone --depth 1 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 #git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 #git clone --depth 1 https://github.com/sirpdboy/luci-app-ddns-go package/ddnsgo
