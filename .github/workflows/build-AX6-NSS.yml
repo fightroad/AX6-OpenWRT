@@ -170,14 +170,35 @@ jobs:
         allowUpdates: true
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
-          基于VIKINGYFY合并的immortalwrt构建
-          首次使用建议全新刷写
-          NSS满血加速！
-          * 基本信息
-          IP: 192.168.1.1
-          账户: root
-          密码: 空
-          
+          ## Redmi AX6 · ImmortalWrt (NSS)
+
+          基于 [VIKINGYFY/immortalwrt](https://github.com/VIKINGYFY/immortalwrt) 构建，启用 NSS 硬件加速。
+
+          > 首次使用建议 **清空配置全新刷写**（stock 大分区机型）。
+
+          ### 预装插件
+          - PassWall（Xray + Sing-box）
+          - DDNS-Go
+          - Socat
+          - UPnP
+          - KMS
+          - EasyTier
+          - ZeroTier
+          - frpc
+
+          ### 固件文件
+          | 后缀 | 用途 |
+          | --- | --- |
+          | `.ubi` | 首次刷入 / U-Boot、ubiformat 等写入 NAND |
+          | `.bin` | 已在 OpenWrt 上时，网页或 `sysupgrade` 升级用 |
+
+          ### 默认登录
+          | 项 | 值 |
+          | --- | --- |
+          | 地址 | `http://192.168.1.1` |
+          | 账户 | `root` |
+          | 密码 | 空（首次登录后请自行设置） |
+
     - name: Delete old releases
       uses: dev-drprasad/delete-older-releases@master
       env:
