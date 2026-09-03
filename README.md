@@ -41,32 +41,11 @@
 - 固件使用 **opkg** 包管理器；Passwall、OpenClash 等插件建议在编译时勾选打进固件。
 - 自编译固件（自定义内核/NSS）**不建议**使用官方在线源安装 kmod 等内核相关包，容易 ABI 不匹配。
 
-## opkg 软件源（24.10.6）
+## opkg 软件源
 
-默认 snapshots 源与自编固件容易不匹配。若需在线安装普通软件包，可在 LuCI 界面修改软件源。
+若 **更新列表** 提示 `Signature check failed`：进入 **系统 → 软件包 → 配置**，注释或删除 `option check_signature` 后重试。
 
-### 1. 修改软件源
-
-进入 **系统 → 软件包 → 配置**（或 **软件源 / 软件包配置**），将原有 `snapshots` 地址全部替换为下面六行。
-
-```
-src/gz immortalwrt_core https://downloads.immortalwrt.org/releases/24.10.6/targets/qualcommax/ipq807x/packages
-src/gz immortalwrt_base https://downloads.immortalwrt.org/releases/24.10.6/packages/aarch64_cortex-a53/base
-src/gz immortalwrt_luci https://downloads.immortalwrt.org/releases/24.10.6/packages/aarch64_cortex-a53/luci
-src/gz immortalwrt_packages https://downloads.immortalwrt.org/releases/24.10.6/packages/aarch64_cortex-a53/packages
-src/gz immortalwrt_routing https://downloads.immortalwrt.org/releases/24.10.6/packages/aarch64_cortex-a53/routing
-src/gz immortalwrt_telephony https://downloads.immortalwrt.org/releases/24.10.6/packages/aarch64_cortex-a53/telephony
-```
-
-保存后，回到 **系统 → 软件包**，点击 **更新列表**。
-
-### 2. 签名校验失败时
-
-若更新列表提示 `Signature check failed`，是因为自编固件（snapshots）与 24.10.6 release 源的签名密钥不一致。
-
-在 **系统 → 软件包 → 配置** 中，注释或删掉掉 option check_signature
-
-关闭签名校验有安全风险，仅建议在可信网络下使用。仍**不要**用在线源安装 kmod；PassWall 等已编入固件的组件勿用 opkg 覆盖升级。
+关闭签名校验有安全风险；不要用在线源安装 kmod，PassWall 等已编入固件的包勿用 opkg 覆盖升级。
 
 
 ![image](https://github.com/user-attachments/assets/89a32e90-f5e1-4f46-9d54-9ba8c6e85f9e)
