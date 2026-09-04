@@ -41,6 +41,12 @@ if [ ! -d "$FRP_DST_DIR" ]; then
 fi
 cp -f "$FRP_SRC_MK" "$FRP_DST_DIR/Makefile"
 echo "frp: using official prebuilt binary Makefile ($(grep '^PKG_VERSION:=' "$FRP_DST_DIR/Makefile"))"
+
+# frpc：LuCI 启用开关 + 默认关闭（避免未配置时连 127.0.0.1:7000 反复重启）
+chmod +x "$DIY_DIR/frp/patch_enable.sh"
+"$DIY_DIR/frp/patch_enable.sh" \
+  "feeds/packages/net/frp/files" \
+  "feeds/luci/applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js"
 #git clone --depth 1 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 #git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 #git clone --depth 1 https://github.com/sirpdboy/luci-app-ddns-go package/ddnsgo
