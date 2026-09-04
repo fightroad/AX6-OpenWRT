@@ -15,14 +15,22 @@ LuCI ---> Collections ---> luci-ssl-openssl              # LuCI HTTPS（OpenSSL�
 ## Applications（已安装）
 LuCI ---> Applications ---> luci-app-autoreboot          # 计划重启
 LuCI ---> Applications ---> luci-app-ddns-go             # 动态域名（ddns-go）
+LuCI ---> Applications ---> luci-app-easytier            # EasyTier 组网（配套 easytier-noweb）
 LuCI ---> Applications ---> luci-app-firewall            # 防火墙（firewall4 / nftables）
+LuCI ---> Applications ---> luci-app-frpc                # FRP 客户端（官方预编译 frpc + Imm LuCI；diy 补启用开关，默认关）
 LuCI ---> Applications ---> luci-app-package-manager     # 软件包管理（opkg）
 LuCI ---> Applications ---> luci-app-passwall              # Passwall 代理（本固件唯一梯子前端）
 LuCI ---> Applications ---> luci-app-ramfree               # 释放内存
+LuCI ---> Applications ---> luci-app-socat                # Socat 端口转发（Lienol 源）
 LuCI ---> Applications ---> luci-app-uhttpd                # uHTTPd Web 服务器
 LuCI ---> Applications ---> luci-app-upnp                  # UPnP 端口转发（miniupnpd-nftables）
 LuCI ---> Applications ---> luci-app-vlmcsd                # KMS 激活服务
 LuCI ---> Applications ---> luci-app-zerotier              # ZeroTier 组网
+
+## Protocols（已安装）
+LuCI ---> Protocols ---> luci-proto-ipv6                 # IPv6 协议支持
+LuCI ---> Protocols ---> luci-proto-ppp                  # PPPoE 等
+LuCI ---> Protocols ---> luci-proto-wireguard            # WireGuard（网络 → 接口添加；无单独应用菜单）
 
 ## Passwall 子选项（本固件已选）
 LuCI ---> Applications ---> luci-app-passwall
@@ -38,6 +46,9 @@ LuCI ---> Themes ---> luci-theme-bootstrap                 # Bootstrap 默认主
 
 ## 相关系统包（非 LuCI，但配套启用）
 Base system ---> zram-swap                               # ZRAM 交换分区
+Network ---> VPN ---> wireguard-tools                    # WireGuard 用户态工具（配合 luci-proto-wireguard）
+Network ---> frpc                                        # frp 客户端二进制（diy 用官方 Release 预编译，非 Imm 源码编 WebUI）
+Network ---> easytier-noweb                              # EasyTier（无 WebUI 二进制；界面用 luci-app-easytier）
 
 
 # =============================================================================
@@ -48,7 +59,7 @@ Base system ---> zram-swap                               # ZRAM 交换分区
 
 ## 代理 / 科学上网
 LuCI ---> Applications ---> luci-app-openclash           # OpenClash（本固件未编入，与 Passwall 二选一）
-LuCI ---> Applications ---> luci-app-homeproxy            # HomeProxy（Sing-box 系）
+LuCI ---> Applications ---> luci-app-homeproxy            # HomeProxy（Sing-box 客户端）
 LuCI ---> Applications ---> luci-app-v2raya              # v2rayA
 LuCI ---> Applications ---> luci-app-gost                # Gost 代理
 LuCI ---> Applications ---> luci-app-microsocks          # 轻量 SOCKS5
@@ -70,7 +81,7 @@ LuCI ---> Applications ---> luci-app-tor                 # Tor 匿名网络
     luci-app-passwall ---> Include Shadowsocks_Rust_Server  # SS Rust 服务端
 
 ## VPN 服务端 / 客户端
-LuCI ---> Applications ---> luci-app-openvpn-server      # OpenVPN 服务端（本固件未编入）
+LuCI ---> Applications ---> luci-app-openvpn-server      # OpenVPN 服务端（未编入；Imm 版易抽风，若要加优先 Lienol 源）
 LuCI ---> Applications ---> luci-app-ipsec-vpnd          # IPSec VPN 服务端
 LuCI ---> Applications ---> luci-app-libreswan           # Libreswan IPSec
 LuCI ---> Applications ---> luci-app-ocserv              # OpenConnect VPN
@@ -81,8 +92,7 @@ LuCI ---> Applications ---> luci-app-rp-pppoe-server     # Roaring Penguin PPPoE
 LuCI ---> Applications ---> luci-app-pppoe-relay       # PPPoE 中继
 
 ## 内网穿透 / 组网
-LuCI ---> Applications ---> luci-app-frpc                # FRP 客户端
-LuCI ---> Applications ---> luci-app-frps                # FRP 服务端
+LuCI ---> Applications ---> luci-app-frps                # FRP 服务端（本固件未编入，仅 frpc）
 LuCI ---> Applications ---> luci-app-xfrpc               # XFRP 客户端
 LuCI ---> Applications ---> luci-app-nps                 # NPS 内网穿透
 LuCI ---> Applications ---> luci-app-n2n                   # N2N VPN
@@ -262,6 +272,7 @@ LuCI ---> Applications ---> luci-app-flowoffload         # 与 NSS 冲突，勿�
 LuCI ---> Applications ---> luci-app-sfe                   # 与 NSS 冲突，勿开
 LuCI ---> Applications ---> luci-app-filetransfer        # 已由 luci-app-package-manager 替代
 LuCI ---> Applications ---> luci-app-xlnetacc              # 迅雷快鸟，已失效
+LuCI ---> Applications ---> luci-app-openvpn-server      # Imm 自带版易用性差（开关/状态常对不齐）；本固件已去掉
 
 
 # =============================================================================
@@ -275,17 +286,28 @@ LuCI ---> Applications ---> luci-app-xlnetacc              # 迅雷快鸟，已�
 #    本固件仅编入 Passwall（Xray + Sing-Box + Geoview + Geodata，xiaorouji 源编译）。
 #    未编入 OpenClash；若自行勾选编译，也不要与 Passwall 同时运行。
 
-# 3. 包管理
-#    本固件使用 opkg；在线安装插件优先用「系统 → 软件包」，自编译固件勿混用官方 kmod 源。
+# 3. frpc
+#    diy.sh 用官方 frp Release 预编译二进制替换 Imm 源码编译（避开 node/host 编 WebUI）。
+#    LuCI 仍为 Imm luci-app-frpc（UCI → /var/etc/frpc.toml）；AX6-IPQ/frp/patch_enable.sh
+#    在启动设置增加「启用」开关，默认关闭，避免未配置时连 127.0.0.1:7000 被 respawn 拉崩。
+#    上游 LuCI/init 锚点变更会导致补丁失败并中断编译。
 
-# 4. IPv6 支持（按需勾选）
+# 4. WireGuard
+#    使用 luci-proto-wireguard：网络 → 接口 → 添加 → WireGuard VPN（无单独应用菜单）。
+#    与 PassWall/EasyTier 里的 WG 节点/组网不是同一套；连回家请用系统 WG + 官方客户端。
+
+# 5. 包管理
+#    本固件使用 opkg；在线安装插件优先用「系统 → 软件包」，自编译固件勿混用官方 kmod 源。
+#    若出现 Signature check failed，可注释 /etc/opkg.conf 中的 option check_signature。
+
+# 6. IPv6 支持（按需勾选）
 Extra packages ---> ipv6helper                           # 勾选后相关依赖会自动带上
 Network ---> odhcp6c
 Network ---> odhcpd-ipv6only
 LuCI ---> Protocols ---> luci-proto-ipv6
 LuCI ---> Protocols ---> luci-proto-ppp
 
-# 5. 配置变更流程
+# 7. 配置变更流程
 #    编辑 AX6-IPQ/.config，或运行 AX6-IPQ Config（会执行 make defconfig 同步上游依赖）
 #    → 提交 .config → 运行 Build OpenWRT for AX6-NSS → Releases 下载固件
 #    取消 LuCI 插件不会自动去掉 openvpn-openssl 等依赖包，需在 menuconfig 中手动取消。
