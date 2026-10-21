@@ -26,15 +26,6 @@ rm -rf package/openwrt-passwall-packages package/openwrt-passwall
 git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
 git clone --depth 1 https://github.com/xiaorouji/openwrt-package package/openwrt-passwall
 
-# immortalwrt/packages#2001：删掉 2.3.11 已包含的 020/030，并按新源码重打 040
-# 合入上游后 020 不存在，自动跳过
-if [ -f feeds/packages/net/miniupnpd/patches/020-descr-filter-fix.patch ]; then
-  ( set -o pipefail
-    curl -fsSL https://github.com/immortalwrt/packages/commit/11ebc02d3914b5b3e05c964ac1d21f7e5b8cd6be.diff \
-      | patch -p1 -d feeds/packages
-  ) || exit 1
-fi
-
 # frp：用官方预编译包替换 Imm 源码编译（避免 node/host 编 WebUI 失败）
 # 保留 feeds 里 Imm 的 files/（init、uci），LuCI 仍用官方 luci-app-frpc
 DIY_DIR="$(cd "$(dirname "$0")" && pwd)"
